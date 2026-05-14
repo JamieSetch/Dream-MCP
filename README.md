@@ -200,7 +200,20 @@ The generated note includes frontmatter compatible with **Dataview**, your full 
 
 ## MCP integration
 
-`dream init` writes a `.mcp.json` to your project root. Claude Code reads this on startup and connects to Dream's MCP server automatically.
+`dream init` automatically configures everything. Here's what happens and how to verify it's working:
+
+**1. Install Dream globally**
+```bash
+npm install -g dream-mcp
+```
+
+**2. Initialize in your project**
+```bash
+cd your-project
+dream init
+```
+
+This writes a `.mcp.json` to your project root:
 
 ```json
 {
@@ -213,6 +226,21 @@ The generated note includes frontmatter compatible with **Dataview**, your full 
   }
 }
 ```
+
+**3. Open the project in Claude Code**
+
+Open the project folder in Claude Code (desktop app or VS Code extension). Claude Code detects `.mcp.json` on startup and connects to the Dream MCP server automatically. You'll see `dream` listed under active MCP servers.
+
+**4. Verify it's connected**
+```bash
+dream doctor
+```
+
+All checks should pass. Claude now has full access to your project memory.
+
+**5. Use `/dream` at the end of every session**
+
+Type `/dream` in the Claude Code chat panel. Claude saves your task, logs changes, records preferences, and flags issues — all written to `CLAUDE.md`. Open a new session and Claude picks up exactly where you left off.
 
 **MCP tools available to Claude:**
 

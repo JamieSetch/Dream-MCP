@@ -1,10 +1,12 @@
 # `DREAM`
 
-![DREAM](logo.svg)
+<p align="center">
+  <img src="logo.svg" alt="DREAM"/>
+</p>
 
 **Persistent project memory for Claude Code sessions.**
 
-Dreaming allows animals to consolidate memory and wake up sharper. Claude does the opposite — it hallucinates, loses context, and forgets everything between sessions. That's why we built Dream.
+Dreaming allows animals to consolidate memory and wake up sharper. Claude does the opposite — it hallucinates, loses context, and forgets everything between sessions. That's why I built Dream.
 
 ---
 

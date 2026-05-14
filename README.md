@@ -1,8 +1,6 @@
 # `DREAM`
 
-<p align="center">
-  <img src="logo.svg" alt="DREAM"/>
-</p>
+![DREAM](logo.svg)
 
 **Persistent project memory for Claude Code sessions.**
 

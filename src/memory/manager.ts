@@ -4,6 +4,23 @@ import { claudeMdPath, tasksMdPath, dreamDir } from '../utils/paths.js'
 import { parseSections, renderSections, updateSection } from './diff.js'
 import type { ProjectMemory } from './schema.js'
 
+const writeQueues = new Map<string, Promise<void>>()
+
+function withWriteLock(projectRoot: string, fn: () => Promise<void>): Promise<void> {
+  const prev = writeQueues.get(projectRoot) ?? Promise.resolve()
+  const next = prev.then(fn)
+  writeQueues.set(projectRoot, next.catch(() => {}))
+  return next
+}
+
+async function writeDirect(projectRoot: string, content: string): Promise<void> {
+  const tmpPath = path.join(dreamDir(projectRoot), `CLAUDE.md.${process.pid}.tmp`)
+  const destPath = claudeMdPath(projectRoot)
+  await fs.mkdir(dreamDir(projectRoot), { recursive: true })
+  await fs.writeFile(tmpPath, content, 'utf-8')
+  await fs.rename(tmpPath, destPath)
+}
+
 export async function readMemory(projectRoot: string): Promise<string | null> {
   try {
     return await fs.readFile(claudeMdPath(projectRoot), 'utf-8')
@@ -13,13 +30,7 @@ export async function readMemory(projectRoot: string): Promise<string | null> {
 }
 
 export async function writeMemory(projectRoot: string, content: string): Promise<void> {
-  const tmpPath = path.join(dreamDir(projectRoot), 'CLAUDE.md.tmp')
-  const destPath = claudeMdPath(projectRoot)
-
-  // Atomic write: write to tmp, then rename
-  await fs.mkdir(dreamDir(projectRoot), { recursive: true })
-  await fs.writeFile(tmpPath, content, 'utf-8')
-  await fs.rename(tmpPath, destPath)
+  return withWriteLock(projectRoot, () => writeDirect(projectRoot, content))
 }
 
 export async function readTasks(projectRoot: string): Promise<string | null> {
@@ -35,54 +46,56 @@ export async function writeTasks(projectRoot: string, content: string): Promise<
 }
 
 export async function updateMemorySection(projectRoot: string, sectionName: string, content: string): Promise<void> {
-  const existing = await readMemory(projectRoot)
-  if (!existing) return
-
-  const updated = updateSection(existing, sectionName, content)
-  await writeMemory(projectRoot, updated)
+  return withWriteLock(projectRoot, async () => {
+    const existing = await readMemory(projectRoot)
+    if (!existing) return
+    await writeDirect(projectRoot, updateSection(existing, sectionName, content))
+  })
 }
 
 export async function updateCurrentTask(projectRoot: string, task: string): Promise<void> {
-  await updateMemorySection(projectRoot, 'CURRENT TASK', task)
+  return updateMemorySection(projectRoot, 'CURRENT TASK', task)
 }
 
 export async function addOpenIssue(projectRoot: string, issue: string): Promise<void> {
-  const content = await readMemory(projectRoot)
-  if (!content) return
-
-  const sections = parseSections(content)
-  const existing = sections.get('OPEN ISSUES') ?? ''
-  const newContent = existing ? existing + '\n- ' + issue : '- ' + issue
-  sections.set('OPEN ISSUES', newContent)
-  await writeMemory(projectRoot, renderSections(sections))
+  return withWriteLock(projectRoot, async () => {
+    const content = await readMemory(projectRoot)
+    if (!content) return
+    const sections = parseSections(content)
+    const existing = sections.get('OPEN ISSUES') ?? ''
+    sections.set('OPEN ISSUES', existing ? existing + '\n- ' + issue : '- ' + issue)
+    await writeDirect(projectRoot, renderSections(sections))
+  })
 }
 
 export async function resolveIssue(projectRoot: string, issueText: string): Promise<boolean> {
-  const content = await readMemory(projectRoot)
-  if (!content) return false
-
-  const sections = parseSections(content)
-  const existing = sections.get('OPEN ISSUES') ?? ''
-  const lines = existing.split('\n')
-  const filtered = lines.filter((l) => !l.toLowerCase().includes(issueText.toLowerCase()))
-
-  if (filtered.length === lines.length) return false
-
-  sections.set('OPEN ISSUES', filtered.join('\n'))
-  await writeMemory(projectRoot, renderSections(sections))
-  return true
+  let resolved = false
+  await withWriteLock(projectRoot, async () => {
+    const content = await readMemory(projectRoot)
+    if (!content) return
+    const sections = parseSections(content)
+    const existing = sections.get('OPEN ISSUES') ?? ''
+    const lines = existing.split('\n')
+    const filtered = lines.filter((l) => !l.toLowerCase().includes(issueText.toLowerCase()))
+    if (filtered.length === lines.length) return
+    sections.set('OPEN ISSUES', filtered.join('\n'))
+    await writeDirect(projectRoot, renderSections(sections))
+    resolved = true
+  })
+  return resolved
 }
 
 export async function appendRecentChange(projectRoot: string, items: string[]): Promise<void> {
-  const content = await readMemory(projectRoot)
-  if (!content) return
-
-  const sections = parseSections(content)
-  const today = new Date().toISOString().slice(0, 10)
-  const newBlock = `${today}\n${items.map((i) => `- ${i}`).join('\n')}`
-  const existing = sections.get('RECENT CHANGES') ?? ''
-  sections.set('RECENT CHANGES', newBlock + (existing ? '\n\n' + existing : ''))
-  await writeMemory(projectRoot, renderSections(sections))
+  return withWriteLock(projectRoot, async () => {
+    const content = await readMemory(projectRoot)
+    if (!content) return
+    const sections = parseSections(content)
+    const today = new Date().toISOString().slice(0, 10)
+    const newBlock = `${today}\n${items.map((i) => `- ${i}`).join('\n')}`
+    const existing = sections.get('RECENT CHANGES') ?? ''
+    sections.set('RECENT CHANGES', newBlock + (existing ? '\n\n' + existing : ''))
+    await writeDirect(projectRoot, renderSections(sections))
+  })
 }
 
 export async function ensureDreamDir(projectRoot: string): Promise<void> {

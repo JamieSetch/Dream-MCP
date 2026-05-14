@@ -4,7 +4,7 @@
   "description": "Persistent project memory for Claude Code sessions",
   "type": "module",
   "bin": {
-    "dream": "./bin/dream"
+    "dream": "bin/dream"
   },
   "files": [
     "dist",
@@ -51,7 +51,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/JamieSetch/dream-mcp.git"
+    "url": "git+https://github.com/JamieSetch/dream-mcp.git"
   },
   "homepage": "https://github.com/JamieSetch/dream-mcp#readme",
   "bugs": {

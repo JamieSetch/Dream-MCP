@@ -8,7 +8,8 @@
   },
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "logo.svg"
   ],
   "scripts": {
     "build": "tsup",
@@ -49,11 +50,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jamiesetch/dream-mcp.git"
+    "url": "https://github.com/JamieSetch/dream-mcp.git"
   },
-  "homepage": "https://github.com/jamiesetch/dream-mcp#readme",
+  "homepage": "https://github.com/JamieSetch/dream-mcp#readme",
   "bugs": {
-    "url": "https://github.com/jamiesetch/dream-mcp/issues"
+    "url": "https://github.com/JamieSetch/dream-mcp/issues"
   },
   "author": "Jamie Setch"
 }

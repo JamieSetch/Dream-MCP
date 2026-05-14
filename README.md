@@ -1,16 +1,20 @@
 # `DREAM`
 
+![DREAM](logo.svg)
+
 **Persistent project memory for Claude Code sessions.**
 
-Claude forgets everything between sessions. Dream fixes that — permanently.
+Dreaming allows animals to consolidate memory and wake up sharper. Claude does the opposite — it hallucinates, loses context, and forgets everything between sessions. That's why we built Dream.
 
 ---
 
 ## What it does
 
-Dream scans your repository, generates a structured `CLAUDE.md` memory file, and loads it into every Claude Code session automatically via MCP. Claude instantly understands your stack, architecture, conventions, and current task — without you explaining anything.
+Dream scans your repository and generates a structured `CLAUDE.md` memory file that loads into every Claude Code session automatically via MCP. Claude instantly understands your stack, architecture, conventions, and current task — without you explaining anything.
 
-It also learns your preferences over time. Every correction you give Claude, every pattern you reinforce — Dream records it, weights it by frequency, and injects it as permanent instructions for all future sessions.
+It learns your preferences over time. Every correction you give Claude, every pattern you reinforce — Dream records it, weights it by frequency, and injects it as permanent instructions for all future sessions.
+
+When the hallucinations begin, type `/dream`. Claude saves everything, you open a fresh session, and it picks up exactly where you left off — just like sleeping.
 
 ---
 
@@ -147,7 +151,7 @@ Token target: **≤ 1,500 tokens**. Dream trims automatically by priority if you
 
 Dream learns how you work. There are two ways preferences accumulate:
 
-**Auto-detection** — on `dream init` and `dream preferences learn`, Dream analyzes your codebase:
+**Auto-detection** — on `dream init` and `dream preferences learn`, Dream analyses your codebase:
 - Export style (named vs default)
 - Comment density
 - TypeScript strictness

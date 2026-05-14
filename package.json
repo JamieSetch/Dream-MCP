@@ -1,0 +1,59 @@
+{
+  "name": "dream-mcp",
+  "version": "1.0.0",
+  "description": "Persistent project memory for Claude Code sessions",
+  "type": "module",
+  "bin": {
+    "dream": "./dist/cli/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsx src/cli/index.ts",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build && npm run typecheck"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.15.0",
+    "chalk": "^5.3.0",
+    "chokidar": "^3.6.0",
+    "commander": "^12.1.0",
+    "ora": "^8.1.1",
+    "simple-git": "^3.27.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.0",
+    "tsup": "^8.3.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "claude",
+    "claude-code",
+    "mcp",
+    "mcp-server",
+    "memory",
+    "context",
+    "ai",
+    "developer-tools",
+    "obsidian",
+    "productivity"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jamiesetch/dream-mcp.git"
+  },
+  "homepage": "https://github.com/jamiesetch/dream-mcp#readme",
+  "bugs": {
+    "url": "https://github.com/jamiesetch/dream-mcp/issues"
+  },
+  "author": "Jamie Setch"
+}

@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "dream": {
+      "type": "stdio",
+      "command": "dream",
+      "args": [
+        "mcp"
+      ]
+    }
+  }
+}

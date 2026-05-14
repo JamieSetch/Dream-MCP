@@ -4,10 +4,11 @@
   "description": "Persistent project memory for Claude Code sessions",
   "type": "module",
   "bin": {
-    "dream": "./dist/cli/index.js"
+    "dream": "./bin/dream.js"
   },
   "files": [
     "dist",
+    "bin",
     "README.md",
     "logo.svg"
   ],

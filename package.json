@@ -4,7 +4,7 @@
   "description": "Persistent project memory for Claude Code sessions",
   "type": "module",
   "bin": {
-    "dream": "./bin/dream.js"
+    "dream": "./bin/dream"
   },
   "files": [
     "dist",

@@ -292,4 +292,4 @@ Dream detects out of the box:
 
 ## License
 
-MIT
+MIT 2.0

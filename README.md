@@ -35,9 +35,9 @@ cd your-project
 dream init
 ```
 
-Dream scans your repo, generates `CLAUDE.md`, configures the MCP server, and installs the `/dream` slash command. Claude Code picks it up automatically on next launch.
+Run `dream init` once per project. It scans your repo, generates `CLAUDE.md`, and configures the MCP server. The `/dream` slash command is installed globally — it works in every Claude Code session automatically from that point on, no setup needed per project.
 
-**At the end of every session, type `/dream` in Claude Code.** Claude reviews the conversation, updates your memory, saves preferences, and logs what changed. Next session picks up exactly where this one left off.
+**At the end of every session, type `/dream` in Claude Code.** Claude saves everything, you open a fresh session, and it picks up exactly where you left off.
 
 ---
 
